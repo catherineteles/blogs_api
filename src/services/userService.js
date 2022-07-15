@@ -14,6 +14,7 @@ const usersService = {
     }
     return true;
   },
+
   validateBody: (data) => {
     const schema = Joi.object({
       email: Joi.string().email().required(),
@@ -30,9 +31,15 @@ const usersService = {
     }
     return value;
   },
+
   create: async ({ email, password, displayName, image }) => {
     const user = await User.create({ email, password, displayName, image });
     return user;
+  },
+
+  list: async () => {
+    const users = await User.findAll();
+    return users;
   },
 
 };
