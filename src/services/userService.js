@@ -44,7 +44,7 @@ const usersService = {
     return users;
   },
 
-  findByIdEager: async (id) => {
+  findById: async (id) => {
     const user = await User.findByPk(id, {
       attributes: { exclude: ['password'] },
     });
