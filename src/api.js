@@ -19,6 +19,7 @@ app.use((err, _req, res, _next) => {
     switch (name) {
       case 'ValidationError': res.status(code).json({ message }); break;
       case 'UnauthorizedError': res.status(401).json({ message }); break;
+      case 'NotFoundError': res.status(404).json({ message }); break;
       default: console.warn(err); res.sendStatus(500);
     }
 });
