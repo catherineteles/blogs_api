@@ -18,8 +18,8 @@ const categoryService = {
   },
 
   create: async ({ name }) => {
-    const user = await Category.create({ name });
-    return user;
+    const category = await Category.create({ name });
+    return category;
   },
 
 };
