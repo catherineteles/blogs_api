@@ -1,20 +1,13 @@
 const Joi = require('joi');
 const db = require('../database/models');
 const jwtService = require('./jwtService');
+const { runSchema } = require('./errorHandling');
 
 const authService = {
-  validateBody: (data) => {
-    const schema = Joi.object({
-      email: Joi.string().email().required(),
-      password: Joi.string().required().min(6),
-    });
-
-    const { error, value } = schema.validate(data);
-
-    if (error) throw error;
-
-    return value;
-  },
+  validateBody: runSchema(Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required().min(6),
+  })),
 
   login: async (email, passwordGiven) => {
     const user = await db.User.findOne({ 
@@ -23,7 +16,8 @@ const authService = {
 
     if (!user || user.password !== passwordGiven) {
       const e = new Error('Invalid fields');
-      e.name = 'UnauthorizedError';
+      e.name = 'ValidationError';
+      e.code = 400;
       throw e;
     }
 

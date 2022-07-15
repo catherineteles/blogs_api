@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 
 const authRouter = require('./routes/authRouter');
 
@@ -10,6 +11,15 @@ app.use(express.json());
 
 app.use('/login', authRouter);
 
+app.use((err, _req, res, _next) => {
+    const { message, name, code } = err;
+    switch (name) {
+      case 'ValidationError': res.status(code).json({ message }); break;
+      case 'UnauthorizedError': res.status(401).json({ message }); break;
+      default: console.warn(err); res.sendStatus(500);
+    }
+});
+  
 // ...
 
 // É importante exportar a constante `app`,
