@@ -21,10 +21,21 @@ module.exports = {
       displayName: {
         type: Sequelize.STRING,
         allowNull: false,
+        field: 'display_name'
       },
       image: {
         type: Sequelize.STRING,
         allowNull: true,
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        field: 'created_at'
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        field: 'updated_at'
       },
     });
   },
