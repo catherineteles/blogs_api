@@ -22,6 +22,11 @@ const categoryService = {
     return category;
   },
 
+  list: async () => {
+    const categories = await Category.findAll();
+    return categories;
+  },
+
 };
 
 module.exports = categoryService;
