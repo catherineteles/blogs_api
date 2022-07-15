@@ -38,7 +38,9 @@ const usersService = {
   },
 
   list: async () => {
-    const users = await User.findAll();
+    const users = await User.findAll({ attributes: { 
+      exclude: ['password', 'createdAt', 'updatedAt'],
+     } });
     return users;
   },
 

@@ -6,6 +6,7 @@ const runSchema = (schema) => async (data) => {
         error.message = 'Some required fields are missing';
         throw error;
       }
+      error.code = 400;
       throw error;
     }
     return value;
