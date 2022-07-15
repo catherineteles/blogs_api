@@ -9,9 +9,7 @@ const User = (sequelize, DataTypes) => {
     displayName: DataTypes.STRING,
     image: DataTypes.STRING,
   }, {
-    tableName: 'Users',
-    underscored: true,
-    timesStamps: false,
+    timestamps: false,
   });
 
   return User;
