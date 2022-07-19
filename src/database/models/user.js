@@ -13,6 +13,7 @@ const User = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
   }, {
     timestamps: false,
+    tableName: 'Users',
   });
 
   User.associate = (db) => {
