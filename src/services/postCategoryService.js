@@ -1,6 +1,6 @@
 const { postCategory } = require('../database/models');
 
-const blogPostService = {
+const postCategoryService = {
 
   create: async ({ categoryId, postId }) => {
     const category = await postCategory.create({ categoryId, postId });
@@ -9,4 +9,4 @@ const blogPostService = {
 
 };
 
-module.exports = blogPostService;
+module.exports = postCategoryService;
