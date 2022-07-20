@@ -24,7 +24,13 @@ const blogPostController = {
         const blogPosts = await blogPostService.list();
         
         res.status(200).json(blogPosts);
-      },
+    },
+
+    findById: async (req, res) => {
+        const post = await blogPostService.findById(req.params.id);
+    
+        res.status(200).json(post);
+    },
 };
 
 module.exports = blogPostController;

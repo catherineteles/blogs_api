@@ -46,6 +46,24 @@ const blogPostService = {
     return blogPosts;
   },
 
+  findById: async (id) => {
+    const blogPost = await BlogPost.findByPk(id, { include: [{ 
+      model: User,
+      as: 'user', 
+      attributes: { exclude: ['password'] },
+    },
+    { model: Category,
+      as: 'categories',
+   }],
+  });
+  if (!blogPost) {
+    const e = new Error('Post does not exist');
+    e.name = 'NotFoundError';
+    throw e;
+  }
+    return blogPost;
+  },
+
 };
 
 module.exports = blogPostService;

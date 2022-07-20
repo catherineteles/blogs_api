@@ -8,6 +8,7 @@ const router = Router();
 router.use(authController.validateToken);
 
 router.get('/', blogPostController.list);
+router.get('/:id', blogPostController.findById);
 router.post('/', blogPostController.addNew);
 
 module.exports = router;
