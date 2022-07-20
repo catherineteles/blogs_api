@@ -27,6 +27,18 @@ const categoryService = {
     return categories;
   },
 
+  exists: async (id) => {
+    const category = await Category.findByPk(id);
+
+    if (!category) {
+      const e = new Error('"categoryIds" not found');
+      e.name = 'ValidationError';
+      e.code = 400;
+      throw e;
+    }
+    return true;
+  },
+
 };
 
 module.exports = categoryService;

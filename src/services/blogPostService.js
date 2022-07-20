@@ -1,18 +1,36 @@
 const Joi = require('joi');
-const { blogPost } = require('../database/models');
-const { runSchema } = require('./errorHandling');
+const { BlogPost } = require('../database/models');
+const postCategoryService = require('./postCategoryService');
 
 const blogPostService = {
+  create: async ({ title, content, userId, categoryIds }) => {
+  const post = await BlogPost.create({ title, content, userId });
+      
+  await postCategoryService.create({
+              categoryIds, postId: post.id,
+            });
+      
+  return post;
+  },
 
-  validateBody: runSchema(Joi.object({
-        title: Joi.string().required(),
-        content: Joi.string().required().min(6),
-        categoryIds: Joi.array().required(),
-    })),
+  validateBody: (data) => {
+    const schema = Joi.object({
+      title: Joi.string().required().messages({
+        'string.empty': 'Some required fields are missing',
+      }),
+      content: Joi.string().required().messages({
+        'string.empty': 'Some required fields are missing',
+      }),
+      categoryIds: Joi.array().required(),
+    });
 
-  create: async ({ title, content, userId }) => {
-    const category = await blogPost.create({ title, content, userId });
-    return category;
+    const { error, value } = schema.validate(data);
+
+    if (error) {
+        error.code = 400;
+        throw error;
+    }
+    return value;
   },
 
 };

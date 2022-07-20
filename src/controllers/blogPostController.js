@@ -1,37 +1,24 @@
-const Sequelize = require('sequelize');
-const config = require('../database/config/config');
-
-const sequelize = new Sequelize(config.development);
-
 const blogPostService = require('../services/blogPostService');
 const authService = require('../services/authService');
-const postCategoryService = require('../services/postCategoryService');
 
-const blogPosController = {
+const { validateBody } = require('../services/blogPostService');
+const categoryService = require('../services/categoryService');
+
+const blogPostController = {
     addNew: async (req, res) => {
-        try {
-          const { title, content, categoryIds } = req.body;
-          const { authorization } = req.headers;
+        const { title, content, categoryIds } = req.body;
+        const { authorization } = req.headers;
+        validateBody({ title, content, categoryIds });
+        await Promise.all(categoryIds.map((id) => (
+            categoryService.exists(id)
+        )));
 
-          const dataToken = authService.validateToken(authorization);
-          const userId = dataToken.id;
-      
-          await sequelize.transaction(async (t) => {
-            const post = await blogPostService.create({
-                title, content, userId,
-            }, { transaction: t });
-      
-            await Promise.all(categoryIds.map((categoryId) => (
-                postCategoryService.create({
-              categoryId, postId: post.id,
-            }, { transaction: t }))));
-      
-            return res.status(201).json(post);
-          });
-        } catch (e) {
-          res.status(e.code).json(e.message);
-        }
-      },
+        const dataToken = authService.validateToken(authorization);
+        const userId = dataToken.data.id;
+
+        const post = await blogPostService.create({ title, content, categoryIds, userId });
+        return res.status(201).json(post);
+    },
 };
 
-module.exports = blogPosController;
+module.exports = blogPostController;
