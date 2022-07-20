@@ -9,6 +9,7 @@ router.use(authController.validateToken);
 
 router.get('/', blogPostController.list);
 router.get('/:id', blogPostController.findById);
+router.put('/:id', blogPostController.updatePost);
 router.post('/', blogPostController.addNew);
 
 module.exports = router;

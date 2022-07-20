@@ -27,10 +27,24 @@ const blogPostController = {
     },
 
     findById: async (req, res) => {
-        const post = await blogPostService.findById(req.params.id);
+        const id = await blogPostService.checkIfExists(req.params.id);
+        const post = await blogPostService.findById(id);
     
         res.status(200).json(post);
     },
+
+    updatePost: async (req, res) => {
+        const id = await blogPostService.checkIfExists(req.params.id);
+        const { authorization } = req.headers;
+        const { data } = authService.validateToken(authorization);
+        await blogPostService.verifyUser(id, data.id);
+        const { title, content } = req.body;
+        await blogPostService.validateUpdate({ title, content });
+        await blogPostService.updatePost({ id, title, content });
+        const post = await blogPostService.findById(id);
+        
+        res.status(200).json(post);
+    }, 
 };
 
 module.exports = blogPostController;
