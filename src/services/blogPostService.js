@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { BlogPost } = require('../database/models');
+const { BlogPost, User, Category } = require('../database/models');
 const postCategoryService = require('./postCategoryService');
 
 const blogPostService = {
@@ -31,6 +31,19 @@ const blogPostService = {
         throw error;
     }
     return value;
+  },
+
+  list: async () => {
+    const blogPosts = await BlogPost.findAll({ include: [{ 
+      model: User,
+      as: 'user', 
+      attributes: { exclude: ['password'] },
+    },
+    { model: Category,
+      as: 'categories',
+   }],
+  });
+    return blogPosts;
   },
 
 };
