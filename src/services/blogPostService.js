@@ -108,6 +108,13 @@ const blogPostService = {
   );
    return updated;
   },
+
+  deletePost: async (id) => {
+     await BlogPost.destroy({
+      where: { id },
+    });
+  },
+  
 };
 
 module.exports = blogPostService;

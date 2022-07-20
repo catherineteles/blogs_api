@@ -44,7 +44,17 @@ const blogPostController = {
         const post = await blogPostService.findById(id);
         
         res.status(200).json(post);
-    }, 
+    },
+    
+    deletePost: async (req, res) => {
+        const id = await blogPostService.checkIfExists(req.params.id);
+        const { authorization } = req.headers;
+        const { data } = authService.validateToken(authorization);
+        await blogPostService.verifyUser(id, data.id);
+        await blogPostService.deletePost(id);
+
+        res.status(204).json();
+    },
 };
 
 module.exports = blogPostController;
