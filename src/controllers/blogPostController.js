@@ -55,6 +55,17 @@ const blogPostController = {
 
         res.status(204).json();
     },
+
+    searchPost: async (req, res) => {
+        const { q } = req.query;
+        if (!q || q === '') {
+            const blogPosts = await blogPostService.list();
+            return res.status(200).json(blogPosts);
+        }
+        const blogPosts = await blogPostService.searchTerm(q);
+        
+        res.status(200).json(blogPosts);
+    },
 };
 
 module.exports = blogPostController;

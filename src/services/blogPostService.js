@@ -1,3 +1,7 @@
+const Sequelize = require('sequelize');
+
+const { Op } = Sequelize;
+
 const Joi = require('joi');
 const { BlogPost, User, Category } = require('../database/models');
 const postCategoryService = require('./postCategoryService');
@@ -113,6 +117,21 @@ const blogPostService = {
      await BlogPost.destroy({
       where: { id },
     });
+  },
+
+  searchTerm: async (query) => {
+    const blogPosts = await BlogPost.findAll({
+      include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories' }],
+      where: { 
+        [Op.or]: [
+            { title: { [Op.like]: `${query}%` } }, 
+            { content: { [Op.like]: `${query}%` } }, 
+        ],
+      },
+    });
+    return blogPosts;
   },
   
 };
